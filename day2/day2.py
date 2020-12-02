@@ -13,12 +13,15 @@ def readPswd():
         return None
 
 def pswdValid(char, start, stop, pswd):
-    count = 0
-    for letter in pswd:
-        if letter == char:
-            count+=1
+    start = start - 1 # Convert to 0 base index
+    stop = stop - 1
 
-    if (count >= start) and (count <= stop):
+    letter1 = pswd[start]
+    letter2 = pswd[stop]
+
+    if (letter1 == char) and (letter2 == char):
+        return False
+    elif (letter1 == char) or (letter2 == char):
         return True
     else:
         return False
@@ -31,12 +34,6 @@ def main():
         count += 1 if valid else 0
     
     print(count)
-
-
-
-
-
-
 
 if __name__ == "__main__":
     main()
