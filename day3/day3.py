@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 import sys
 
+SLOPES = [
+    [1,1],
+    [3,1],
+    [5,1],
+    [7,1],
+    [1,2]
+]
+
 def mapGrid():
     return [list(line.strip()) for line in sys.stdin.readlines()]
 
@@ -26,9 +34,12 @@ def treeCounter(grid, right, down):
 
 def main():
     grid = mapGrid()
-    num_trees = treeCounter(grid, 3, 1)
-    print(num_trees)
- 
 
+    mult_trees = 1
+    for right, left in SLOPES:
+        mult_trees = mult_trees * treeCounter(grid, right, left)
+    
+    print(mult_trees)
+    
 if __name__ == "__main__":
     main()
