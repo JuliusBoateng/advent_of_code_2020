@@ -10,7 +10,7 @@ def readPassport():
     
     return passport
 
-def passportValidator(passport, req_set, opt_set):
+def passportValidator(passport, req_set):
     if len(passport) <= 6:
         return False
 
@@ -19,9 +19,6 @@ def passportValidator(passport, req_set, opt_set):
 
         if key in req_set:
             req_set.remove(key)
-        
-        if key in opt_set:
-            opt_set.remove(key)
     
     return True if (len(req_set) == 0) else False
 
@@ -29,8 +26,7 @@ def main():
     count = 0
     while (passport:= readPassport()):
         req_set = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
-        opt_set = {"cid"}
-        val = passportValidator(passport, req_set, opt_set)
+        val = passportValidator(passport, req_set)
 
         count += 1 if val else 0
     
