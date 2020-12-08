@@ -15,12 +15,12 @@ def playInstr(instr):
     visited_instr = set()
 
     index = 0
-    count = 0
+    # count = 0
     acc = 0
     while (index < num_instr) and (index not in visited_instr):
         visited_instr.add(index)
-        count+=1
-        print(f"Order: {count} {instr[index]}")
+        # count+=1
+        # print(f"Order: {count} {instr[index]}")
 
         if instr[index][0] == "acc":
             acc += instr[index][1]
@@ -29,7 +29,7 @@ def playInstr(instr):
             index += instr[index][1]
         else:
             index += 1
-    
+
     return acc
 
 def main():
