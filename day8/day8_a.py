@@ -20,19 +20,14 @@ def playInstr(instr):
     while (index < num_instr) and (index not in visited_instr):
         visited_instr.add(index)
         count+=1
-  
+        print(f"Order: {count} {instr[index]}")
+
         if instr[index][0] == "acc":
             acc += instr[index][1]
-            print(f"Order: {count} {instr[index]}")
-            print(index)
             index += 1
         elif instr[index][0] == "jmp":
-            print(f"Order: {count} {instr[index]}")
-            print(index)
             index += instr[index][1]
         else:
-            print(f"Order: {count} {instr[index]}")
-            print(index)
             index += 1
     
     return acc
