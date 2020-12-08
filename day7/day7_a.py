@@ -3,15 +3,14 @@ import sys
 import re
 from collections import defaultdict
 
-def numParents(child_bag, adj_bag_list, visited):
+def getParents(child_bag, adj_bag_list, visited):
     if child_bag not in adj_bag_list:
         visited.add(child_bag)
         return visited
     
     for parent_bag in adj_bag_list[child_bag]:
-        if parent_bag not in visited:
             visited.add(parent_bag)
-            visited.update(numParents(parent_bag, adj_bag_list, visited))
+            getParents(parent_bag, adj_bag_list, visited)
 
     return visited
 
@@ -37,9 +36,8 @@ def readRules():
 
 def main():
     adj_bag_list = readRules()
-    # print(adj_bag_list)
-    num_parents = numParents("shiny gold bags", adj_bag_list, set())
-    print(len(num_parents))
+    parents = getParents("shiny gold bags", adj_bag_list, set())
+    print(len(parents))
 
 
 
