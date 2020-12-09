@@ -23,6 +23,7 @@ def playInstr(instr, start_index, swap, visited_instr):
         if instr[index][0] == "acc":
             acc += instr[index][1]
             index += 1
+        
         elif instr[index][0] == "jmp":
             if not swap:
                 new_instr = instr[:index] + [["nop", instr[index][1]]] + instr[index + 1:]
@@ -32,6 +33,7 @@ def playInstr(instr, start_index, swap, visited_instr):
                     return acc + val
             
             index += instr[index][1]
+        
         else:
             if not swap:
                 new_instr = instr[:index] + [["jmp", instr[index][1]]] + instr[index + 1:]
