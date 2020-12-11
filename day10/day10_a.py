@@ -5,16 +5,11 @@ def readJolts():
     return sorted([int(jolt.strip()) for jolt in sys.stdin.readlines()])
 
 def calcDiff(jolts, valid_jolt_diff):
+    diff_map = {1: 0, 2: 0, 3:0}
+    new_jolts = [0] + jolts + [jolts[-1] + 3]
     curr_jolt = 0
-    diff_map = dict()
 
-    for valid_diff in valid_jolt_diff:
-        if valid_diff == 3: #Built in adaptor always has a difference of 3
-            diff_map[valid_diff] = 1
-        else:
-            diff_map[valid_diff] = 0
-
-    for jolt in jolts:
+    for jolt in new_jolts[1:]:
         diff = jolt - curr_jolt
         if diff not in valid_jolt_diff:
             break
