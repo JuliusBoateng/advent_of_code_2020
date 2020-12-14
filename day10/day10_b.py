@@ -6,10 +6,9 @@ def readJolts():
 
 def calcDiff(jolts, valid_jolt_diff):
     diff_map = {1: 0, 2: 0, 3:0}
-    new_jolts = [0] + jolts + [jolts[-1] + 3]
     curr_jolt = 0
 
-    for jolt in new_jolts[1:]:
+    for jolt in jolts[1:]:
         diff = jolt - curr_jolt
         if diff not in valid_jolt_diff:
             break
@@ -19,7 +18,8 @@ def calcDiff(jolts, valid_jolt_diff):
 
     return diff_map
 
-def joltTable(diff_map, jolts_total):
+def joltTable(diff_map, jolts_total, jolts):
+    jolts_set = set(jolts)
     table = [[0 for col in range(jolts_total + 1)] for row in range(len(diff_map) + 1)]
 
     for row in range(len(diff_map) + 1): #Initializing empty set
@@ -27,9 +27,16 @@ def joltTable(diff_map, jolts_total):
 
     for row in range(1, len(diff_map) + 1):
         for col in range(1, jolts_total + 1):
+            if col not in jolts_set:
+                continue
+
             val = 0
-            if col - row >= 0:
-                val += table[row][col - row]
+            new_col = col - row
+            if new_col >= 0:
+                while new_col not in jolts_set:
+                    new_col -= 1
+                
+                val += table[row][new_col]
             
             val += table[row - 1][col]
             table[row][col] = val
@@ -39,16 +46,18 @@ def joltTable(diff_map, jolts_total):
 
 def main():
     jolts = readJolts()
+    jolts = [0] + jolts + [jolts[-1] + 3]
+
     valid_jolt_diff = {1,2,3}
     diff_map = calcDiff(jolts, valid_jolt_diff)
-    print(diff_map)
 
     jolts_total = 0
     for key, val in diff_map.items():
         jolts_total += key * val
     
     print(jolts_total)
-    joltTable(diff_map, jolts_total)
+    print(jolts)
+    joltTable(diff_map, jolts_total, jolts)
 
 if __name__ == "__main__":
     main()
