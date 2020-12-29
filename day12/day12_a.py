@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import sys
-from math import sin, cos, radians, pi
+from math import sin, cos, radians, pi, degrees
 
 def readNavigations():
     return [nav.strip() for nav in sys.stdin.readlines()]
 
 def resultAction(instr, vertical, horizontal, angle):
     action = instr[0]
-    magnitude = instr[1:]
+    magnitude = int(instr[1:])
 
     if action == 'N':
         vertical += magnitude
@@ -22,23 +22,15 @@ def resultAction(instr, vertical, horizontal, angle):
         horizontal -= magnitude
 
     if action == 'L':
-        angle = (angle + radians(magnitude)) % 2*pi
+        angle = (angle + magnitude) % (360)
 
     if action == 'R':
-        angle = (angle - radians(magnitude)) % 2*pi
+        angle = (angle - magnitude) % (360)
 
     if action == 'F':
-        if angle >= 0 and angle <= 180:
-            vertical += magnitude * sin(angle)
-        else:
-            vertical -= magnitude * sin(angle)
-
-        if angle >= pi/2 and angle <= pi*(3/2):
-            horizontal -= magnitude * cos(angle)
-        else:
-            horizontal += magnitude * cos(angle)
+        vertical += magnitude * sin(radians(angle))
+        horizontal += magnitude * cos(radians(angle))
         
-    
     return vertical, horizontal, angle
 
 
@@ -48,11 +40,17 @@ def navigateShip(nav):
     angle = 0
 
     for instr in nav:
-        resultAction(instr, vertical, horizontal, angle)
+        vertical, horizontal, angle = resultAction(instr, vertical, horizontal, angle)
+    
+    print(horizontal, vertical)
+    manhattan_dist = abs(horizontal) + abs(vertical)
+    return round(manhattan_dist, 3)
+
 
 def main():
     nav = readNavigations()
-    navigateShip(nav)
+    manhattan_dist = navigateShip(nav)
+    print(manhattan_dist)
 
 
 
