@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import sys
 
+MEMO = dict()
+
 def readJolts():
-    return sorted([int(jolt.strip()) for jolt in sys.stdin.readlines()])
+    jolts = sorted([int(jolt.strip()) for jolt in sys.stdin.readlines()])
+    return [0] + jolts + [max(jolts) + 3]
 
 def calcDiff(jolts, valid_jolt_diff):
     diff_map = {1: 0, 2: 0, 3:0}
@@ -18,46 +21,30 @@ def calcDiff(jolts, valid_jolt_diff):
 
     return diff_map
 
-def joltTable(diff_map, jolts_total, jolts):
-    jolts_set = set(jolts)
-    table = [[0 for col in range(jolts_total + 1)] for row in range(len(diff_map) + 1)]
+def recurDiff(jolts_set, curr):
+    if curr == 0:
+        return 1
 
-    for row in range(len(diff_map) + 1): #Initializing empty set
-        table[row][0] = 1
-
-    for row in range(1, len(diff_map) + 1):
-        for col in range(1, jolts_total + 1):
-            if col not in jolts_set:
-                continue
-
-            val = 0
-            new_col = col - row
-            if new_col >= 0:
-                while new_col not in jolts_set:
-                    new_col -= 1
-                
-                val += table[row][new_col]
-            
-            val += table[row - 1][col]
-            table[row][col] = val
-
-    print(table)
-
+    if curr in MEMO:
+        return MEMO[curr]
+    
+    ways = 0
+    for num in range(1,4):
+        new_curr = curr - num
+        if new_curr in jolts_set:
+            ways += recurDiff(jolts_set, new_curr)
+        
+    MEMO[curr] = ways
+    return MEMO[curr]
 
 def main():
     jolts = readJolts()
-    jolts = [0] + jolts + [jolts[-1] + 3]
-
-    valid_jolt_diff = {1,2,3}
-    diff_map = calcDiff(jolts, valid_jolt_diff)
-
-    jolts_total = 0
-    for key, val in diff_map.items():
-        jolts_total += key * val
+    jolts_set = set(jolts)
+    result = recurDiff(jolts_set, max(jolts))
+    print(result)
+    # valid_jolt_diff = {1,2,3}
+    # diff_map = calcDiff(jolts, valid_jolt_diff)
+    # print(diff_map[1] * diff_map[3])
     
-    print(jolts_total)
-    print(jolts)
-    joltTable(diff_map, jolts_total, jolts)
-
 if __name__ == "__main__":
     main()
